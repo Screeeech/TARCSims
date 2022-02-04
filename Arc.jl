@@ -87,10 +87,10 @@ module Arc
 	## Example
 	BlindGen(Rocket(), (130, 55, 85, 0.003))
 	"""
-    function BlindGen(a::Rocket, s)
-        rocket = Rocket(env=a.env, mass=a.mass, dt=a.dt, SampleRate=a.SampleRate, s_0=a.s_0)
+    function BlindGen(rocket::Rocket, s)
+        # rocket = Rocket(env=a.env, mass=a.mass, dt=a.dt, SampleRate=a.SampleRate, s_0=a.s_0)
 
-        apogee = apogee_sim(rocket, s)[1]
+        apogee = apogee_sim(rocket, s, noise=false)[1]
         actions = GetActions(rocket, s)
         
         if apogee > rocket.env.target
@@ -171,7 +171,7 @@ module Arc
                 observe = false
                 NextObservation = t + a.SampleRate
             else
-                s = RocketSim.DragObjects.gen(a, GetActions(a, s)[LastAction])
+                s = RocketSim.DragObjects.gen(a, GetActions(a, s)[LastAction], noise=false)
 
                 if history
                     append!(StateHistory, tuple(s))

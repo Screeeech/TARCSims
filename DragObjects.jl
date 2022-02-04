@@ -78,7 +78,7 @@ module DragObjects
 	apogee_sim(MyAeroProjectile) => (297, .07, -0.01)
 	```
 	"""
-	function apogee_sim(a::AeroProjectile, noise=true)
+	function apogee_sim(a::AeroProjectile; noise=true)
 		s = a.s_0
 
 		while true
@@ -109,10 +109,10 @@ module DragObjects
 	apogee_sim(MyAeroProjectile, (132.68, 68.77, 81.686 * pi / 180, 0)) => (297, .07, -0.01)
 	```
 	"""
-	function apogee_sim(a::AeroProjectile, s)
+	function apogee_sim(a::AeroProjectile, s; noise=true)
 		
 		while true
-			s = gen(a, s)
+			s = gen(a, s, noise=true)
 			
 			if s[3] < 0
 				break
