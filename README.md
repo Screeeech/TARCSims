@@ -3,8 +3,6 @@
 ## Julia Files
 - Arc.jl
   - Active rocket control simulation module
-- atwood-waterspout.jl
-    - really just serves as an example of how a simple waterspout analysis is done
 - DragObjects.jl
     - Defines functions and types used for the rocket simulation and analysis (well documented)
 - edge-fitting.jl
