@@ -25,8 +25,8 @@ end
 # ╔═╡ a57b9283-f3c4-4443-9e5c-174529107d06
 begin
 	# Pluto is dumb; it can't import stuff properly
-	# With this cell, you still need to say RocketSim.export()
-	# Outside of pluto, you can simply call export()
+	# With this cell, you still need to say RocketSim.SomeFunction()
+	# Outside of pluto, you can simply call SomeFunction()
 	
 	include("./RocketSim.jl")
 	using .RocketSim

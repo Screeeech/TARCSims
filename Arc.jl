@@ -15,7 +15,18 @@ module Arc
     using .RocketSim
 
 
-    # Returns the next possible actions in the form of a 1xn array of state tuples
+    """
+		GetActions(rocket, state)
+	
+    Returns the next possible actions in the form of a 1xn vector of state tuples
+	---
+	## Arguments
+	-	rocket::Rocket = The rocket object
+	-	s::Tuple{Float64, Float64, Float64, Float64} = the state tuple
+
+	## Example
+	GetActions(Rocket(), (130, 55, 85, 0.003))
+	"""
     function GetActions(rocket::Rocket, s)
         MaxChange = 0.1 * rocket.dt / 0.01
         actions = [s[4] - MaxChange, s[4], s[4] + MaxChange]
@@ -33,8 +44,21 @@ module Arc
     end
 
 
-    # Makes action decisions by choosing the state with the action that has the least
-    # discrepancy between the next simulation step and the optimal states surface
+    """
+		OptimalGen(rocket, state, model)
+	
+    Makes action decisions by choosing the state with the action that has the least
+    discrepancy between the next simulation step and the optimal states surface
+	---
+	## Arguments
+	-	rocket::Rocket = The rocket object
+	-	s::Tuple{Float64, Float64, Float64, Float64} = the state tuple
+    -   model::Tuple = tuple of (coefficients, terms) where coeffcients is a 1xn vector of polynomial coeffcients and terms is a nx2
+    vector of the powers of the x and y variables in a 3d polynomial function.
+
+	## Example
+	GetActions(Rocket(), (130, 55, 85, 0.003), PolyModel)
+	"""
     function OptimalGen(rocket::Rocket, s, model)
         experimentStates_ = []
         
@@ -48,10 +72,21 @@ module Arc
     end
 
 
-    # if the apogee_sim() of the current state is above target, it will choose the
-    # last available action (opening the airbrakes). If below target, it will choose
-    # the first returned action (closing the airbrakes).
-    # Returns tuple of next simulated state and the action index it chooses
+    """
+		BlindGen(rocket, state)
+	
+    if the apogee_sim() of the current state is above target, it will choose the
+    last available action (opening the airbrakes). If below target, it will choose
+    the first returned action (closing the airbrakes).Returns tuple of next 
+    simulated state and the action index it chooses
+	---
+	## Arguments
+	-	a::Rocket = The rocket object
+	-	s::Tuple{Float64, Float64, Float64, Float64} = the state tuple
+
+	## Example
+	BlindGen(Rocket(), (130, 55, 85, 0.003))
+	"""
     function BlindGen(a::Rocket, s)
         rocket = Rocket(env=a.env, mass=a.mass, dt=a.dt, SampleRate=a.SampleRate, s_0=a.s_0)
 
@@ -68,7 +103,19 @@ module Arc
     end
 
 
-    # Runs the optimal surface model simulation. Not updated to include sample rates
+    """
+		OptimalApogeeSim(rocket, hist=true)
+	
+    Runs the optimal surface model simulation. Not updated to include sample rates
+	---
+	## Arguments
+	-	a::Rocket = The rocket object
+	-	model::Tuple = tuple of (coefficients, terms) where coeffcients is a 1xn vector of polynomial coeffcients and terms is a nx2
+    vector of the powers of the x and y variables in a 3d polynomial function.
+
+	## Example
+	OptimalApogeeSim(Rocket(), PolyModel)
+	"""
     function OptimalApogeeSim(a::Rocket, model)
         s = a.s_0
         StateHistory = []
@@ -86,7 +133,18 @@ module Arc
     end
 
 
-    # runs the simple above-below simulation
+    """
+		BlindApogeeSim(rocket, history=true)
+	
+    Runs the simple above-below simulation
+	---
+	## Arguments
+	-	a::Rocket = The rocket object
+	-	history::boolean = setting to true will return an array of all simulation steps (default=true)
+
+	## Example
+	BlindGen(Rocket(), (130, 55, 85, 0.003))
+	"""
     function BlindApogeeSim(a::Rocket; history=true)
         s = a.s_0
         

@@ -95,16 +95,24 @@ module RocketSim
     end
 
 
-    function DragObjects.gen(rocket::Rocket, s)
+    function DragObjects.gen(rocket::Rocket, s; noise=true)
         h, v, θ, d = s
 
         a = (DragObjects.drag(s)/rocket.mass) + [0,-rocket.env.g]
         
-        v_ = [v*cos(θ), v*sin(θ)] + a*rocket.dt + rand(rocket.noise[2], 2)
-        θ_ = atan(v_[2]/v_[1]) + rand(rocket.noise[3])
-        h_ = v_[2] * rocket.dt + h + rand(rocket.noise[1])
+        v_ = [v*cos(θ), v*sin(θ)] + a*rocket.dt
+        θ_ = atan(v_[2]/v_[1])
+        h_ = v_[2] * rocket.dt + h
+        d_ = d
 
-        return (h_, norm(v_), θ_, d + rand(rocket.noise[4]))
+        if noise
+            h_ += rand(rocket.noise[1])
+            v_ += rand(rocket.noise[2], 2)
+            θ_ += rand(rocket.noise[3])
+            d_ += rand(rocket.noise[4])
+        end
+
+        return (h_, norm(v_), θ_, d_)
     end
 
 

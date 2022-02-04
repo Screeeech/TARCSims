@@ -62,25 +62,27 @@ module DragObjects
 
 
 	"""
-		apogee_sim(AeroProjectile)
+		apogee_sim(AeroProjectile, noise=true)
 	Simulates AeroProjectile to its apogee as defined by when pitch becomes negative.
 	Updates state tuple, s = (height, velocity, pitch), continuously until pitch < 0 
 	by calling a user-defined gen(a, s) function starting from AeroProjectile's s_0.
-	Returns the final state of the simulation.
+	Returns the final state of the simulation. Requires a 
+	DragObjects.gen(rocket, state, noise=true) function to be declared.
 	---
 	## Arguments:
 	- 	a::AeroProjectile = `AeroProjectile` object
+	-	noise::boolean = turns noise on and off in simulations (default=true)
 
 	## Example:
 	```
 	apogee_sim(MyAeroProjectile) => (297, .07, -0.01)
 	```
 	"""
-	function apogee_sim(a::AeroProjectile)
+	function apogee_sim(a::AeroProjectile, noise=true)
 		s = a.s_0
 
 		while true
-			s = gen(a, s)
+			s = gen(a, s, noise=noise)
 			
 			if s[3] < 0
 				break
