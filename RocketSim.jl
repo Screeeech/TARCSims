@@ -46,7 +46,9 @@ module RocketSim
 	-	mass::Float64 = mass of rocket in kg (default 0.54122)
 	-	dt::Float64 = time step (default 0.001)
     -   SampleRate::Float64 = how often the rocket can sense data in seconds
+    -   SensorNoise::Tuple = Tuple of noise distributions for OBSERVATIONS which desn't affect true state tuple
     -   noise::Tuple = Tuple of noise distributions for each variable in the state tuple
+    -   DeploymentDelay::Float64 = The number of seconds the rocket must wait after simulation starts to make actions
     -   s_0::Tuple{Float64, Float64, Float64, Float64} = the intial of the state tuple of the rocket
                                                             in the form of (height-m, speed-m/s, pitch-radians, deployment∈[0,1])
                                                             
@@ -60,7 +62,10 @@ module RocketSim
         dt::Float64 = 0.001
 
         SampleRate::Float64 = 0.01
+        SensorNoise::Tuple = (Normal(0, 0), Normal(0, 0), Normal(0, 0), Normal(0, 0))
         noise::Tuple = (Normal(0, 0), Normal(0, 0), Normal(0, 0), Normal(0, 0))
+
+        DeploymentDelay::Float64 = 0.0
 
         # s_0 = (height, velocity_mag, pitch, deployment)
         s_0::Tuple{Float64, Float64, Float64, Float64}

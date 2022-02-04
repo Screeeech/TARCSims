@@ -75,7 +75,7 @@ module Arc
     """
 		BlindGen(rocket, state)
 	
-    if the apogee_sim() of the current state is above target, it will choose the
+    if the apogee_sim() of the current observed state is above target, it will choose the
     last available action (opening the airbrakes). If below target, it will choose
     the first returned action (closing the airbrakes).Returns tuple of next 
     simulated state and the action index it chooses
@@ -88,9 +88,9 @@ module Arc
 	BlindGen(Rocket(), (130, 55, 85, 0.003))
 	"""
     function BlindGen(rocket::Rocket, s)
-        # rocket = Rocket(env=a.env, mass=a.mass, dt=a.dt, SampleRate=a.SampleRate, s_0=a.s_0)
+        ObservedState = s .+ rand.(rocket.SensorNoise)
 
-        apogee = apogee_sim(rocket, s, noise=false)[1]
+        apogee = apogee_sim(rocket, ObservedState, noise=false)[1]
         actions = GetActions(rocket, s)
         
         if apogee > rocket.env.target
@@ -152,35 +152,20 @@ module Arc
         NextObservation = 0.0
         LastAction = 2
         t = 0.0
-
-        if history
-            StateHistory = []
-        end
+        
+        history ? StateHistory=[] : Nothing
 
         while true
-            if observe
+            if observe && t >= a.DeploymentDelay
                 s, LastAction = BlindGen(a, s)
-                
-                if history
-                    append!(StateHistory, tuple(s))
-                end
-                if s[3] < 0
-                    break
-                end
-                
                 observe = false
                 NextObservation = t + a.SampleRate
             else
                 s = RocketSim.DragObjects.gen(a, GetActions(a, s)[LastAction], noise=false)
-
-                if history
-                    append!(StateHistory, tuple(s))
-                end
-
-                if s[3] < 0
-                    break
-                end
             end
+
+            history && append!(StateHistory, tuple(s))
+            s[3] < 0 && break
 
             t += a.dt
             if t >= NextObservation
@@ -188,10 +173,8 @@ module Arc
             end
         end
 
-        if history
-            return StateHistory
-        else
-            return s
-        end
+        
+        history && return StateHistory
+        return s
     end
 end

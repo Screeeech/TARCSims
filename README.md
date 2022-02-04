@@ -15,7 +15,9 @@
     - Just to mess around
 - RocketSim.jl
     - Conatins rocket simulation and state space analysis code
-- StateDiscrepancy.jl
+- sims.jl
+    - does ARC simulations (uses Arc.jl)
+- StateAnalysis.jl
     - Finds discrepancy between the optimal surface and a state to score states
 - waterspout-plot.jl
     - Plots waterspout

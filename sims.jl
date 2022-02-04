@@ -6,9 +6,10 @@ using MAT
 
 
 NoiseTuple = (Normal(0, 0.003), Normal(0, 0.002), Normal(0, 0.0015), Normal(0, 0))
-rocket = Rocket(s_0 = (132.68, 68.77, 81.686 * pi / 180, 0), env=Environment(g=9.804), SampleRate=0.10, noise=NoiseTuple)
-rocketp = Rocket(s_0 = (132.68, 68.77, 81.686 * pi / 180, 0), env=Environment(g=9.804), SampleRate=0.07)
+SensorNoiseTuple = (Normal(0, 0.3), Normal(0, 0.5), Normal(0, 0.09), Normal(0, 0))
 
+rocket = Rocket(s_0 = (132.68, 68.77, 81.686 * pi / 180, 0), env=Environment(g=9.804), SampleRate=0.07, noise=NoiseTuple, SensorNoise=SensorNoiseTuple, DeploymentDelay=0.5)
+rocketp = Rocket(s_0 = (132.68, 68.77, 81.686 * pi / 180, 0), env=Environment(g=9.804), SampleRate=0.07)
 rocket2 = Rocket(s_0 = (123.06, 67.493, 61.82 * pi / 180, 0), env=Environment(g=9.804))
 rocket3 = Rocket(s_0 = (120, 73.77, 75 * pi / 180, 0), env=Environment(g=9.804))
 
