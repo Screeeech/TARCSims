@@ -28,7 +28,7 @@ module Arc
 	GetActions(Rocket(), (130, 55, 85, 0.003))
 	"""
     function GetActions(rocket::Rocket, s)
-        MaxChange = 0.1 * rocket.dt / 0.01
+        MaxChange = rocket.DeploymentRate * rocket.dt
         actions = [s[4] - MaxChange, s[4], s[4] + MaxChange]
 
         for (index, value) in enumerate(actions)

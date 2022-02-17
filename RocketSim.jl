@@ -49,6 +49,7 @@ module RocketSim
     -   SensorNoise::Tuple = Tuple of noise distributions for OBSERVATIONS which desn't affect true state tuple
     -   noise::Tuple = Tuple of noise distributions for each variable in the state tuple
     -   DeploymentDelay::Float64 = The number of seconds the rocket must wait after simulation starts to make actions
+    -   DeploymentRate::Float64 = Amount it can change deployment in one second
     -   s_0::Tuple{Float64, Float64, Float64, Float64} = the intial of the state tuple of the rocket
                                                             in the form of (height-m, speed-m/s, pitch-radians, deployment∈[0,1])
                                                             
@@ -66,6 +67,7 @@ module RocketSim
         noise::Tuple = (Normal(0, 0), Normal(0, 0), Normal(0, 0), Normal(0, 0))
 
         DeploymentDelay::Float64 = 0.0
+        DeploymentRate::Float64 = 1.0
 
         # s_0 = (height, velocity_mag, pitch, deployment)
         s_0::Tuple{Float64, Float64, Float64, Float64}
@@ -80,7 +82,7 @@ module RocketSim
         # C_fr = [-0.011249999999999311, 0.004624999999999964, 0.0007847222222222226]
         # Average of both
         C_fr = 0.5 * ([0.07963977623157216, -0.005528027105058144, 0.001112250881374065] + 
-                [-0.011249999999999311, 0.004624999999999964, 0.0007847222222222226])
+                 [-0.011249999999999311, 0.004624999999999964, 0.0007847222222222226])
 
         # Airbrake C_f when it is completely open
         # C_fb = [0.03625000000000833, -0.012125000000000469, 0.004354166666666671]
@@ -169,13 +171,15 @@ module RocketSim
     
     #=
     NoiseTuple = (Normal(0, 0.003), Normal(0, 0.002), Normal(0, 0.0015), Normal(0, 0))
+    LowNoiseTuple = (Normal(0, 0.0015), Normal(0, 0.001), Normal(0, 0.00075), Normal(0, 0))
     rocket = Rocket(s_0 = (132.68, 68.77, 81.686 * pi / 180, 0), noise=NoiseTuple, env=Environment(g=9.804))
-    rocket1 = Rocket(s_0 = (132.68, 68.77, 81.686 * pi / 180, 0), env=Environment(g=9.804))
+    rocket1 = Rocket(s_0 = (118.45, 63.457, 72.509 * pi / 180, 0), env=Environment(g=9.804), mass=0.633, noise=LowNoiseTuple)
     
     for i in 1:10
-        println(apogee_sim(rocket))
+        println(apogee_sim(rocket1))
     end
     =#
+    
 end
 
 
